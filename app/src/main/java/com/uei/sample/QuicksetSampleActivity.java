@@ -22,26 +22,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +50,6 @@ import com.uei.control.Remote;
 import com.uei.control.ResultCode;
 import com.uei.control.SetupMapResult;
 import com.uei.control.SetupMapStatusCode;
-import com.uei.encryption.helpers.CallerHelper;
 import com.uei.quickset.DeviceListener;
 import com.uei.quickset.DeviceManager;
 import com.uei.quickset.DeviceRef;
@@ -106,8 +95,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 
 	public static boolean HasPermissionToAccessStorage = false;
 	
-	/** The authenticator. */
-	private CallerHelper _authenticator = new CallerHelper();
+
 
 	/** Store and display device types retrieved from ISetup. */
 	private ArrayList<String> _deviceTypes = new ArrayList<String>();
@@ -127,12 +115,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 	/** The device function index. */
 	private int _deviceFunctionIndex = -1;
 	
-	/** Store and display device brands retrieved from ISetup. */
-	private ArrayList<String> _brands = new ArrayList<String>();
 
-	/** The brands adapter. */
-	private ArrayAdapter<String> _brandsAdapter = null;
-	
 	/** The current test codeset functions. */
 	private ArrayList<CodesetFunction> _currentCodesetFunctions = null;
 
@@ -148,11 +131,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 	/** Current devices for volume source. */
 	private ArrayList<String> _volSourceDevices = new ArrayList<String>();
 
-	/** The edit model search. */
-	private EditText _editModelSearch = null;
 
-	/** The edit brand search. */
-	private EditText _editBrandSearch = null;
 
 	/** The brand index. */
 	private int _brandIndex = -1;
@@ -165,12 +144,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 	
 	/** The device type list spinner */
 	private Spinner _lstDeviceTypes = null; 
-	
-	/** The brand list spinner */
-	private Spinner _lstBrands = null;
 
-	/** menu options */
-	private Spinner _lstMenus = null;
 
 	/** The remotes list spinner */
 	private Spinner _lstRemotes = null;
@@ -181,8 +155,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 	/** Use optimized setup maps */
 	private CheckBox _chkUseSetupMaps = null;
 
-	/** Retrieve top brands only */
-	private CheckBox _chkTopBrands = null;
 
 	/** Enable/Disable Auto Lookup */
 	private CheckBox _chkAutoLookup = null;
@@ -198,7 +170,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 	
 	/** The visible flag. */
 	private boolean _visible = false;
-	
+
 	/** The init flag. */
 	private boolean _init = true;
 
@@ -234,7 +206,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 
 	/** The _add device dialog. */
 	private Dialog _addDeviceDialog = null;
-		
+
 	private Menu _optionMenu = null;
 
 	/** Key Id for current test key in setup map. */
@@ -297,39 +269,10 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
         this._commandManager = new IRActionManager();
 		sQuickSet = QuickSet.getInstance();
         initServices();
-		bindMenuOptions();
-		bindRemotesList();
-        bindDeviceList();
-        bindDeviceTypeList();
-        bindDeviceFunctionsList();
-        bindBrandsList();
-        bindDeviceButtons();
-        bindCodesetButtons();
-		hideCodesetButtons(true);
 
-		this._chkUseSetupMaps = (CheckBox) findViewById(R.id.ckbUseSetupMaps);
-		this._chkTopBrands = (CheckBox)findViewById(R.id.ckbTopBrands);
 
-		// Auto look by EDID/CEC, default is true that SDK starts auto lookup at startup
-		this._chkAutoLookup = (CheckBox)findViewById(R.id.ckbAutoLookup);
-		this._chkAutoLookup.setChecked(false);
-		this._chkAutoLookup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				try {
-					if(QuicksetSampleApplication.getSetup() != null) {
-						// NOTE: start auto lookup by calling this API
-						QuicksetSampleApplication.getSetup().startAutoLookup(QuicksetSampleApplication.getSession(),
-								getAuthenticationKey(), isChecked);
-					}
-					if(isChecked){
-						resetDeviceTesting();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+
+
 
 		if(Build.VERSION.SDK_INT >= 23) {
 			// check for permission
@@ -426,25 +369,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
     protected void onResume()
     {
     	super.onResume();
-    	this._visible = true;
-		this._lstMenus.setSelection(0);
-    	if(this._init == false){
-    		hasValidSession();
-			updateRemotesList();
-    		if (QuicksetSampleApplication.getControl() != null) {
-        		try {
-        			this.retrieveDevices();
-				}
-        		catch (Exception e) {							
-					e.printStackTrace();
-				}				        
-        	}
-			this.resetDeviceTesting();
-    	}
-    	else
-    	{
-    		this._init = false;
-    	}
     	startCommandThread();
     }
     
@@ -454,73 +378,13 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
     @Override
     protected void onPause()
     {
-    	try {
-	    	if(this._addDeviceDialog != null && this._addDeviceDialog.isShowing())
-	    	{
-	    		this._addDeviceDialog.dismiss();
-	    		this._addDeviceDialog = null;
-	    	}
-    	}catch (Exception e) {							
-			e.printStackTrace();
-		}	
     	stopCommandThread();
     	super.onPause();
     	this._visible = false;
     }
     
-    /* (non-Javadoc)
-     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	MenuInflater inflater = getMenuInflater();    
-    	inflater.inflate(R.menu.menu, menu);  
-    	this._optionMenu = menu;
-		MenuItem itemMenuFirmwareUpdate = null;
-		if(this._optionMenu != null) {
-			itemMenuFirmwareUpdate = this._optionMenu.findItem(R.id.menuFirmwareUpdate);
-			if(itemMenuFirmwareUpdate != null){
-				itemMenuFirmwareUpdate.setEnabled(true);
-			}
-		}
-    	
-    	return true;
-    }
-    
-    /* (non-Javadoc)
-     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {   
-    	switch (item.getItemId()) {
-			case R.id.menuFirmwareUpdate:
-			{
-				// firmware update
-				Intent intent = new Intent(this, FirmwareUpdateActivity.class);
-				startActivity(intent);
-				break;
-			}
-			case R.id.menuFindRemote:
-			{
-				// find remote
-				Intent intent = new Intent(this, FindRemoteActivity.class);
-				startActivity(intent);
-				break;
-			}
-			case R.id.menuVoiceSearch:
-			{
-				// voice search
-				Intent intent = new Intent(this, VoiceSearchActivity.class);
-				startActivity(intent);
-				break;
-			}
-			default:
-				break;
 
-    	}
-    	
-    	return true;
-    }
+
 
    	/* (non-Javadoc)
 	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
@@ -577,111 +441,10 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 		}
 	}
 
-	/* @Override
-	public boolean onTouchEvent(MotionEvent e) {
-		switch (e.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				Log.i(LOGTAG, String.format("----- motion Event down: x: %f, y: %f",
-						e.getX(), e.getY()));
-				break;
-			case MotionEvent.ACTION_OUTSIDE:
-				Log.i(LOGTAG, String.format("----- motion Event outside: x: %f, y: %f",
-						e.getX(), e.getY()));
-				break;
-			case MotionEvent.ACTION_CANCEL:
-				Log.i(LOGTAG, String.format("----- motion Event cancel: x: %f, y: %f",
-						e.getX(), e.getY()));
-				break;
-			case MotionEvent.ACTION_UP:
-				Log.i(LOGTAG, String.format("----- motion Event up: x: %f, y: %f",
-						e.getX(), e.getY()));
-				break;
-			case MotionEvent.ACTION_MOVE:
-				Log.i(LOGTAG, String.format("----- motion Event move: x: %f, y: %f",
-						e.getX(), e.getY()));
-			case MotionEvent.ACTION_HOVER_MOVE:
-				Log.i(LOGTAG, String.format("----- motion Event hover: x: %f, y: %f",
-						e.getX(), e.getY()));
-				break;
-
-			default: break;
-		}
-		return true;
-
-	}*/
-		/**
-         * Handle Key down event and forward the key event to QuickSet SDK.
-         * We will use scan code to retrieve the Linux key code that is converted from HID report.
-         * @param keyCode
-         * @param event
-         * @return
-         */
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-		Log.d(QuicksetSampleApplication.LOGTAG, "Key Down event: " + keyCode + " - " + event.getScanCode());
-
-		try {
-			// forward key event to QuickSet, if there is any specific actions needed to be executed.
-			Object item = this._lstRemotes.getSelectedItem();
-			if(item != null && item instanceof Remote) {
-				Remote remote = (Remote)item;
-				if(QuicksetSampleApplication.getControl() != null) {
-					// pass scan code to API
-					//HACKHACK: testing OTV for Power ON, since we could not get Power On key event,
-					// simulate the event with digit 0 key:
-					/*if(event.getScanCode() == 0x0b ) {
-						int resultCode = QuicksetSampleApplication.getControl().executeKey(remote.Id,
-								0x3E, KeyCodeEvent.KeyDown.toInteger());  //TODO: remove this testing code
-						//event.getScanCode(), KeyCodeEvent.KeyDown.toInteger());
-						Log.d(QuicksetSampleActivity.LOGTAG,
-								" Execute key = "
-										+ resultCode
-										+ " - "
-										+ ResultCode.getString(resultCode));
-					}*/
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return super.onKeyDown(keyCode, event);
-	}
 
 
-	/**
-	 * Handle Key up event and forward the key event to QuickSet SDK.
-	 * We will use scan code to retrieve the Linux key code that is converted from HID report.
-	 * @param keyCode
-	 * @param event
-     * @return
-     */
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		Log.d(QuicksetSampleApplication.LOGTAG, "Key Up event: " + keyCode + " - " + event.getScanCode());
 
-		try {
-			// forward key event to QuickSet, if there is any specific actions needed to be executed.
-			/*Object item = this._lstRemotes.getSelectedItem();
-			if(item != null && item instanceof Remote) {
-				Remote remote = (Remote)item;
-				if(QuicksetSampleApplication.getControl() != null) {
-					// pass scan code to API
-					int resultCode = QuicksetSampleApplication.getControl().executeKey(remote.Id,
-							event.getScanCode(), KeyCodeEvent.KeyUp.toInteger());
-					Log.d(QuicksetSampleActivity.LOGTAG,
-							" Execute key = "
-									+ resultCode
-									+ " - "
-									+ ResultCode.getString(resultCode));
-				}
-			}*/
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return super.onKeyUp(keyCode, event);
-	}
+
 
 	/** In a separate thread, tries to initialize instances of IControl and ISetup.
 	 * When done, retrieves the list of configured devices, and registers a callback on event of this list change.
@@ -713,18 +476,15 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 							devManager.register(mDeviceListener);
 
 							QuicksetSampleActivity.this._init = false;
-//							QuicksetSampleApplication.registerServiceDisconnectedListener(QuicksetSampleActivity.this);
 							Log.d(QuicksetSampleActivity.LOGTAG, " Registering Key Event callback....");
 							QuicksetSampleApplication.getControl().registerKeyEventListener(QuicksetSampleActivity.this._BLEKeyEventCallback);
 							QuicksetSampleActivity.this.runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
 									try {
-										//QuicksetSampleActivity.this._loadingDialog.dismiss();
-										//QuicksetSampleActivity.this._loadingDialog = null;
-										enableDisableButtons(true);
 										// activate Quickset services
 										if (QuicksetSampleApplication.getSetup().activateQuicksetService(getAuthenticationKey()) == true) {
+											Toast.makeText(_singleton, "Quickset Activated",Toast.LENGTH_LONG).show();
 											Log.d(QuicksetSampleActivity.LOGTAG, "Activated Quickset services.");
 										} else {
 											getLastResultCode("Failed to activated Quickset services. ");
@@ -851,37 +611,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 		
 		return hasValidSession;
 	}
-	
-	/**
-	 * Handle services disconnected.
-	 */
-//	private void handleServicesDisconnected()
-//	{
-//		if(this._visible)
-//		{
-//			this.runOnUiThread(new Runnable() {
-//				@Override
-//				public void run() {
-//					try {
-//						resetDeviceTesting();
-//						QuicksetSampleApplication.getSingleton().bindServices();
-//						AlertDialog.Builder builder1 = new AlertDialog.Builder(QuicksetSampleActivity.this);
-//						builder1.setTitle("Quickset Services")
-//							.setMessage("Quickset services were closed unexpectedly. Reconnecting services...")
-//							.setIcon(android.R.drawable.ic_dialog_alert)
-//							.setCancelable(false)
-//							.setPositiveButton("OK", null);
-//						AlertDialog alert = builder1.create();
-//						alert.show();
-//						initServices();
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//						Log.e(QuicksetSampleActivity.LOGTAG, e.toString());
-//					}
-//				}
-//			});
-//		}
-//	}
+
 	
 	/**
 	 * Show invalid session.
@@ -895,7 +625,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 				 {			
 					@Override
 					public void onClick(DialogInterface arg0, int arg1) {
-						resetDeviceTesting();
 					}			 
 				};					
 				
@@ -1000,442 +729,16 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 	 */
 	private void closeApplication()
 	{
-//		QuicksetSampleApplication.getSingleton().unbindServices();
 		finish();
 		QuicksetSampleApplication.exit();
 	}
 
-	/** Attach codeset-related event handlers:
-	 * one for tested code confirmed as working, 
-	 * one for switching to the next code.
-	 */
-    private void bindCodesetButtons() {
-    	Button btWorks = (Button) findViewById(R.id.btWorks);
-    	btWorks.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (QuicksetSampleActivity.this._isSetupMapRoute)
-				{
-					QuicksetSampleActivity.this.reportTestResult(true);
-				}
-				else
-				{
-					QuicksetSampleActivity.this.addCurrentCodeset();			
-				}
-			}			
-    	});
-    	
-    	Button btNextCode = (Button) findViewById(R.id.btNextCode);
-    	btNextCode.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				
-				if (QuicksetSampleActivity.this._isSetupMapRoute) {
-					QuicksetSampleActivity.this.reportTestResult(false);
-				} else {
-					if (QuicksetSampleActivity.this._codesetIndex == (QuicksetSampleActivity.this._codesetCount - 1)) {
-						QuicksetSampleActivity.this._codesetIndex = 0;
-					} else {
-						QuicksetSampleActivity.this._codesetIndex++;
-					}
-					if(QuicksetSampleActivity.this._isExtendedSetupMapRoute) {						
-						QuicksetSampleActivity.this.setCodesetFullKeysToTest();
-					} else {
-						QuicksetSampleActivity.this.setCodesetToTest();
-                    }
-				}
-			}
-    	});
-
-    	Button btnBrandSearch = (Button) findViewById(R.id.btBrandSearch);
-    	btnBrandSearch.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				_editBrandSearch.clearFocus();
-				if (QuicksetSampleActivity.this._deviceTypeIndex >= 0) {
-					TextView tvCodesets = (TextView)findViewById(R.id.txtCodesets);
-					tvCodesets.setText("");
-					doBrandSearch(_editBrandSearch.getText().toString());
-				} 
-			}			
-    	});
-    	
-    	this._editBrandSearch = (EditText)this.findViewById(R.id.txtBrandName);
-    	
-    	this._editBrandSearch.setOnKeyListener(new View.OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				// If the event is a key-down event on the "enter" button       
-				if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-					// Perform action on key press
-					hideKeyboard();
-					if (_editBrandSearch.getText().toString().length() >= MINUMUM_BRANDMODELTEXT) {
-						doBrandSearch(_editBrandSearch.getText().toString());
-					}
-					return true;
-				}
-
-				return false;
-			}
-		});
-		Button btModelSearch = (Button)findViewById(R.id.btmodelSearch);
-		btModelSearch.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				boolean modelSearch = true;
-				/*try {
-					int result = QuicksetSampleApplication
-								.getSetup()
-								.getModelSearchLockStatus();
-					Log.d(QuicksetSampleActivity.LOGTAG,
-								"Model search status: "
-								+ result);
-								
-					// model search is enabled when the result is 0 (not locked).
-					modelSearch = (result == 0);	
-				} catch (Exception e) {
-					e.printStackTrace();
-				}*/
-				
-				if(modelSearch) {
-					_editModelSearch.clearFocus();
-					
-					// Perform action on key press
-					if(_editModelSearch.getText().toString().length() >= MINUMUM_BRANDMODELTEXT) {
-						doModelSearch(_editModelSearch.getText().toString());
-					}
-				}
-			}
-		});
-		
-		this._editModelSearch = (EditText)this.findViewById(R.id.editModelname);
-    	
-    	this._editModelSearch.setOnKeyListener(new View.OnKeyListener()
-		{    
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event)
-			{        
-				// If the event is a key-down event on the "enter" button       
-				if ((event.getAction() == KeyEvent.ACTION_DOWN) &&  (keyCode == KeyEvent.KEYCODE_ENTER)) 
-				{          
-					_editModelSearch.clearFocus();
-					// Perform action on key press
-					if(_editModelSearch.getText().toString().length() >= MINUMUM_BRANDMODELTEXT) {
-						doModelSearch(_editModelSearch.getText().toString());
-					}
-					return true;       
-				}       
-				
-				return false; 
-			}
-		});
-    	
-    }
-
-    /** Disable buttons until Services are ready */
-    private void enableDisableButtons(boolean enable) {
-    	int state = enable ? View.VISIBLE : View.INVISIBLE;
-    	
-    	try {
-			Button btn = (Button) findViewById(R.id.btDelete);
-	    	btn.setVisibility(state);
-	    	btn = (Button) findViewById(R.id.btAdd);
-	     	btn.setVisibility(state);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
-
-  	/**
-	 * Perform brand search.
-	*/
-	private void doBrandSearch(final String brand)
-	{
-		showWaitingDialog("Searching brands...");
-		Thread thread = new Thread() {
-			@Override
-			public void run() {
-		
-				try {
-					if(brand != null && _deviceTypeIndex >= 0 ) {
-						try
-						{
-							if(brand.length() >= MINUMUM_BRANDMODELTEXT) {
-								// search brands with online flag
-								final String[] brands = QuicksetSampleApplication.getSetup().searchBrands(
-										QuicksetSampleApplication.getSession(),
-										getAuthenticationKey(),
-										_deviceTypeIndex, brand);
-							
-								getLastResultCode("search brands result: ");
-								
-								QuicksetSampleActivity.this.runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											stopWaitDialog();											
-											_deviceFunctions.clear();
-											_deviceFunctionsAdapter.notifyDataSetChanged();
-											_deviceFunctionIndex = -1;											
-											_codesetCount = 0;
-											_codesetIndex = -1;
-											displayBrands(brands);											
-										} catch (Exception e) {
-											e.printStackTrace();
-											Log.i(LOGTAG, " Closing dialog : " + e.toString());
-										}
-									}
-								});		
-							} else {
-								QuicksetSampleActivity.this.runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											retrieveBrands();
-										} catch (Exception e) {
-											e.printStackTrace();
-											Log.e(LOGTAG, " Closing dialog : " + e.toString());
-										}
-									}
-								});		
-							}								
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					} else {
-						stopWaitDialog();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				} 
-			}
-		};
-		thread.start();
-	}
-	
-	/**
-	* Hide keyboard.
-	*/
-	private void hideKeyboard()
-	{
-		try {
-			InputMethodManager inputManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputManager.toggleSoftInput(0, 0);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Perform model search.
-	*/
-	private void doModelSearch(final String model)
-	{		
-		showWaitingDialog("Searching models...");
-		Thread thread = new Thread() {
-			@Override
-			public void run() {
-				_codesetCount =0;
-				_codesetIndex = 0;
-				try {					
-					if (hasValidSession()) {						
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									retrieveModelSearchCodesets();
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						});	
-					}					
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					stopWaitDialog();
-				}
-			}
-		};
-		thread.start();
-		
-	}
-
-	/**
-	 * Show buttons "Works!" and "Next code..." when the the test code flow is
-	 * started.
-	 */
-	private void showCodesetButtons() {
-		Button btn = (Button)findViewById(R.id.btWorks);
-		btn.setVisibility(View.VISIBLE);
-		Button btNextCode = (Button)findViewById(R.id.btNextCode);
-		btNextCode.setVisibility(View.VISIBLE);
-
-		if (this._isSetupMapRoute == true) {
-			btNextCode.setText(R.string.btnNextCode_NotWork);
-		} else {
-			btNextCode.setText(R.string.btnNextCode);
-		}
-
-		btn = (Button)findViewById(R.id.btBrandSearch);
-		btn.setVisibility(View.VISIBLE);
-		EditText text = (EditText)findViewById(R.id.txtBrandName);
-		text.setVisibility(View.VISIBLE);
-		btn = (Button)findViewById(R.id.btmodelSearch);
-		btn.setVisibility(View.VISIBLE);
-		text = (EditText)findViewById(R.id.editModelname);
-		text.setVisibility(View.VISIBLE);
-	}
-
-  	/** Hide buttons after the test code flow is finished. */
-	private void hideCodesetButtons(boolean hideModelSearch) {
-		Button btn = (Button)findViewById(R.id.btWorks);
-		btn.setVisibility(View.INVISIBLE);
-
-		btn = (Button)findViewById(R.id.btNextCode);
-		btn.setVisibility(View.INVISIBLE);
-		if(hideModelSearch) {
-			btn = (Button)findViewById(R.id.btBrandSearch);
-			btn.setVisibility(View.INVISIBLE);
-			EditText text = (EditText)findViewById(R.id.txtBrandName);
-			text.setVisibility(View.INVISIBLE);
-			btn = (Button)findViewById(R.id.btmodelSearch);
-			btn.setVisibility(View.INVISIBLE);
-			text = (EditText)findViewById(R.id.editModelname);
-			text.setVisibility(View.INVISIBLE);
-		}
-	}  
-
-	/**
-	 * Empty all the lists (device types, brands, test functions) after the test
-	 * code flow is finished.
-	 */
-    private void resetDeviceTesting() {
-		this._deviceTypes.clear();
-		this._deviceTypesAdapter.notifyDataSetChanged();
-		this._deviceTypeIndex = -1;
-		resetDeviceTypeSelected(true);
-	}
-	
-	/**
-	 * Reset display after a device type is selected
-	 */
-	private void resetDeviceTypeSelected(boolean hideModelSearch) {
-    	
-		this._deviceFunctions.clear();
-		this._deviceFunctionsAdapter.notifyDataSetChanged();
-		this._deviceFunctionIndex = -1;
-		
-		this._brands.clear();
-		this._brandsAdapter.notifyDataSetChanged();
-		this._brandIndex = -1;
-		this._codesetCount = 0;
-		this._codesetIndex = -1;
-		
-		TextView tvCodesets = (TextView) findViewById(R.id.txtCodesets);
-		tvCodesets.setText("");
-		hideCodesetButtons(hideModelSearch);
-    }
-    
-    /** Generate authentication key to access Setup service. **/
+	/** Generate authentication key to access Setup service. **/
     public String getAuthenticationKey()
     {
     	final QuickSetCompatManager compatManager = (QuickSetCompatManager) sQuickSet.getManager(QuickSet.QUICKSET_COMPAT_MGR);
     	return compatManager.getAuthenticationKey();
     }
-    
-    /** Attach handlers for delete device button and add device button. */
-    private void bindDeviceButtons() {
-    	
-    	Button btAddDevice = (Button) findViewById(R.id.btAdd);
-    	btAddDevice.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				QuicksetSampleActivity.this.retrieveDeviceGroups();
-			}
-
-		});
-    	
-    	Button btDeleteDevice = (Button) findViewById(R.id.btDelete);
-    	btDeleteDevice.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				QuicksetSampleActivity.this.deleteDevice();
-			}
-
-		});
-	}
-
-	private void bindMenuOptions() {
-		this._lstMenus = (Spinner) findViewById(R.id.lstMenus);
-		DeviceTypeListAdapter menuAdapter = new DeviceTypeListAdapter (this, android.R.layout.simple_spinner_dropdown_item,
-				Arrays.asList(MenuOptions));
-		this._lstMenus.setAdapter(menuAdapter);
-		this._lstMenus.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-									   int position, long id) {
-				if(position >= 0 && position < MenuOptions.length) {
-					switch (position) {
-						case 1:
-						{
-							// find remote
-							Intent intent = new Intent(QuicksetSampleActivity.this,
-									FindRemoteActivity.class);
-							startActivity(intent);
-							break;
-						}
-						case 2:
-						{
-							// voice search
-							Intent intent = new Intent(QuicksetSampleActivity.this,
-									VoiceSearchActivity.class);
-							startActivity(intent);
-							break;
-						}
-						case 3:
-						{
-							// firmware update
-							Intent intent = new Intent(QuicksetSampleActivity.this,
-									FirmwareUpdateActivity.class);
-							startActivity(intent);
-							break;
-						}
-						case 4:
-						{
-							// read device info
-							Intent intent = new Intent(QuicksetSampleActivity.this,
-									ReadRemoteActivity.class);
-							startActivity(intent);
-							break;
-						}
-						case 5:
-						{
-							// add EDID data
-							Intent intent = new Intent(QuicksetSampleActivity.this,
-									SetEdidDataActivity.class);
-							startActivity(intent);
-							break;
-						}
-						default:
-							break;
-					}
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapter) {
-			}
-		});
-	}
 
 	/** Attach handlers for bonded remote controls. */
 	private void bindRemotesList() {
@@ -1475,349 +778,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 		});
 	}
 
-    /** Attach handlers for selecting a device from a list. */
-    private void bindDeviceList() {
-    	ListView lstDevices = (ListView) findViewById(R.id.lstDevices);
-		this._devicesAdapter = new DeviceListAdapter(this, R.layout.device_item, this._devices);
-		lstDevices.setAdapter(this._devicesAdapter);
-		
-		lstDevices.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				QuicksetSampleActivity.this._deviceIndex = position;
-				_devicesAdapter.notifyDataSetChanged();
-			}
-			
-		});
-
-		this._lstVolSource = (Spinner) findViewById(R.id.lstDevicesVolLock);
-		this._volumeSourceAdapter = new DeviceTypeListAdapter(this, android.R.layout.simple_spinner_dropdown_item,
-				this._volSourceDevices);
-		this._lstVolSource.setAdapter(this._volumeSourceAdapter);
-		this._lstVolSource.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent,
-									   View view, int position, long id) {
-				if(_volSourceDevices != null && position < _volSourceDevices.size() && position >= 0) {
-
-					Remote remote = null;
-					if(_remoteList != null && _remoteList.size() > 0) {
-						int rIndex = _lstRemotes.getSelectedItemPosition();
-						if (rIndex >= 0 && rIndex < _remoteList.size()) {
-							remote = _remoteList.get(rIndex);
-						}
-					}
-					String deviceName = _volSourceDevices.get(position);
-					if(remote != null) {
-						try {
-							Remote[] remotes = QuicksetSampleApplication.getSetup().getAllRemotes(
-									getAuthenticationKey());
-							int curVolSource = 0;
-							// get current remote's volume soruce
-							if(remotes != null && remotes.length > 0) {
-								for(Remote r : remotes) {
-									if(r.Name.compareTo(remote.Name) == 0){
-										// get the latest volume source
-										curVolSource = r.VolumeSource;
-										break;
-									}
-								}
-							}
-							if(_devices != null) {
-								for(IDevice d : _devices) {
-									Device device = (Device)d;
-									if(device.Name.compareTo(deviceName) == 0 && device.Codeset != null && device.Codeset.length() == 5) {
-										// select new volume source
-										if (QuicksetSampleApplication.getSetup() != null && QuicksetSampleActivity.this._volumeLockInitialized == true) {
-											DeviceType volSource = getDeviceType(device);
-											if(volSource.toInteger() != curVolSource) {
-												int result = QuicksetSampleApplication.getSetup().selectVolumeSourceDevice(
-														getAuthenticationKey(), remote.Id, volSource.toInteger());
-												Log.d(QuicksetSampleActivity.LOGTAG,
-														String.format(" Selecting volume srouce (%d) for remote Id (%d) - Result = %d",
-																volSource.toInteger(), remote.Id, result));
-												return;
-											} else {
-												// no change on volume source
-												return;
-											}
-										}
-										else {
-											//Skip the first time loading for volume source
-											QuicksetSampleActivity.this._volumeLockInitialized = true;
-										}
-									}
-								}
-								if(deviceName != null && deviceName.startsWith("Unknown") && QuicksetSampleActivity.this._volumeLockInitialized == true) {
-									// cannot select volume source device
-									Toast.makeText(QuicksetSampleActivity.this, "Cannot select unknown device!", Toast.LENGTH_SHORT).show();
-								}
-								updateVolumeSourceDevice();
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapter) {
-
-			}
-		});
-    }
-
-    /** Attach handlers for selecting a device type.
-     * When a device type is selected, fill the list of brands for this device type.
-     */
-    private void bindDeviceTypeList() {
-    	this._lstDeviceTypes = (Spinner) findViewById(R.id.lstDeviceTypes);
-		this._deviceTypesAdapter = new DeviceTypeListAdapter(this, android.R.layout.simple_spinner_dropdown_item, this._deviceTypes);
-		this._lstDeviceTypes.setAdapter(this._deviceTypesAdapter);
-		
-		this._lstDeviceTypes.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent,
-					View view, int position, long id) {
-				QuicksetSampleActivity.this._deviceTypeIndex = position;
-				QuicksetSampleActivity.this._brandIndex = -1;
-				Log.d(QuicksetSampleActivity.LOGTAG,
-						" Loading brands for "
-								+ QuicksetSampleActivity.this._deviceTypes
-										.get(position));
-				showWaitingDialog("Retrieving brands...");
-				Thread thread = new Thread() {
-					@Override
-					public void run() {								
-						try {				
-							
-							QuicksetSampleActivity.this.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										QuicksetSampleActivity.this.retrieveBrands();
-									} catch (Exception e) {
-										e.printStackTrace();
-										Log.e(LOGTAG, " Closing dialog : " + e.toString());
-									} finally {
-										stopWaitDialog();
-									}
-								}
-							});										
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-				}
-				};
-				thread.start();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapter) {
-				QuicksetSampleActivity.this._deviceTypeIndex = -1;
-			}
-		});
-    }
-       
-    /** When the device function is selected from a list, the corresponding IR is blasted.
-     */
-    private void bindDeviceFunctionsList() {
-    	ListView lstDeviceFunctions = (ListView) findViewById(R.id.lstDeviceFunctions);
-		this._deviceFunctionsAdapter = new FunctionListAdapter (this, R.layout.listitem, this._deviceFunctions);
-		//this._deviceFunctionsAdapter.setButtonOnTouchListener(this._testFunctionTouchListener);
-		//this._deviceFunctionsAdapter.setButtonOnClickListener(this._testFunctionClickListener);
-		lstDeviceFunctions.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if(position >= 0 && position < _currentCodesetFunctions.size()){
-					try {
-						QuicksetSampleActivity.this._deviceFunctionIndex = position;
-						// start sending IR
-						QuicksetSampleActivity.this.testStartIrFunction();
-						// then stop immediately
-						QuicksetSampleActivity.this.testStopIrFunction();
-					} catch(Exception ex) {
-						Log.e(LOGTAG, ex.toString());
-					}
-				}
-			}
-
-		});
-		lstDeviceFunctions.setAdapter(this._deviceFunctionsAdapter);
-		QuicksetSampleActivity.this._deviceFunctionIndex = 0;
-    }
-    
-    /** On brand selection, codes are retrieved to be tested for this brand. */
-    private void bindBrandsList() {
-    	this._lstBrands = (Spinner) findViewById(R.id.lstBrands);
-		this._brandsAdapter = new DeviceTypeListAdapter (this, android.R.layout.simple_spinner_dropdown_item, 
-									this._brands);
-		this._lstBrands .setAdapter(this._brandsAdapter);
-		
-		this._lstBrands .setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				Log.d(QuicksetSampleActivity.LOGTAG, " Loading codesets for "
-						+ QuicksetSampleActivity.this._brands.get(position));
-				final Integer index = brandList.get(position);
-
-				if (null != index) {
-					QuicksetSampleActivity.this._brandIndex = index;
-
-					// TODO: Add logic for model selection
-					if (2 == index) {
-						// Note: Using '2' is a magic mapping. Need to clean up
-						// FIXME: Remove hard-coding
-						final EditText modelName = findViewById(R.id.editModelname);
-						modelName.setText("Hopper with Sling");
-					}
-					deviceBrandSelected();
-				} else {
-					Log.e(QuicksetSampleActivity.LOGTAG, " Position: " + position);
-
-					Log.e(QuicksetSampleActivity.LOGTAG, " Couldn't find codesets for "
-							+ QuicksetSampleActivity.this._brands.get(position));
-
-					Log.e(QuicksetSampleActivity.LOGTAG, " Contains key: " + brandList.get(0));
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapter) {
-				QuicksetSampleActivity.this._brandIndex = -1;
-			}
-
-		});
-    }
-    
-    /**
-     * Adds the new device by codeset.
-     */
-    private void addNewDevice()
-	{
-		//set up dialog
-        final Dialog dialog = new Dialog(this);        
-        String title = "Add New Device";
-                       
-        dialog.setContentView(R.layout.adddevice);
-        dialog.setTitle(title);
-        dialog.setCancelable(true);
-                
-		final EditText textLabel = (EditText)dialog.findViewById(R.id.txtDeviceName);
-		final EditText textBrand = (EditText)dialog.findViewById(R.id.txtDeviceBrand);
-		final EditText textModel = (EditText)dialog.findViewById(R.id.txtDeviceModel);
-		final EditText textCodeset = (EditText)dialog.findViewById(R.id.txtDeviceCodeset);
-		
-		//set up button
-        final Button buttonOK = (Button) dialog.findViewById(R.id.buttonOK);
-                               
-        buttonOK.setOnClickListener(new OnClickListener() 
-        	{
-        		@Override
-                public void onClick(View v) 
-            	{	
-        			dialog.dismiss();
-        			QuicksetSampleActivity.this._addDeviceDialog = null;
-        			QuicksetSampleActivity.this._loadingDialog = new ProgressDialog(QuicksetSampleActivity.this);            	
-        			QuicksetSampleActivity.this._loadingDialog.setMessage("Adding new device...");
-        			QuicksetSampleActivity.this._loadingDialog.setIndeterminate(true);
-        			QuicksetSampleActivity.this._loadingDialog.setCancelable(false);
-        			QuicksetSampleActivity.this._loadingDialog.show();			
-
-        			Thread thread = new Thread() {
-        				@Override 
-        				public void run() {        			
-		        			try {
-
-		        				if(hasValidSession())
-		        				{					
-		        					String codeset = textCodeset.getText().toString().toUpperCase();
-		        					// checking for input codeset name
-		        					if(codeset.length() == 5) {
-			        					Device device = QuicksetSampleApplication.getSetup().addDeviceByCodeset(
-			        							QuicksetSampleApplication.getSession(),
-			        							getAuthenticationKey(),
-			        							textBrand.getText().toString(),
-			        							textModel.getText().toString(),
-			        							textLabel.getText().toString(),
-			        							codeset);
-			        					QuicksetSampleActivity.this._loadingDialog.dismiss();
-			        					QuicksetSampleActivity.this._loadingDialog = null;
-			        					
-			        					if(device == null) {
-			        						QuicksetSampleActivity.this.runOnUiThread(new Runnable() {
-			        							@Override
-			        							public void run() {
-			        								int resultCode = ResultCode.ERROR;
-			        								try
-			        								{
-			        									resultCode = QuicksetSampleApplication.getSetup().getLastResultCode();
-			        								}
-			        								catch (RemoteException e)
-			        								{
-			        									e.printStackTrace();
-			        								}
-			        								Log.d(QuicksetSampleActivity.LOGTAG, "addDeviceByCodeset result: Last result code = " + resultCode + " - " + ResultCode.getString(resultCode));	
-			        								
-			        								AlertDialog.Builder builder = new AlertDialog.Builder(QuicksetSampleActivity.this);
-			        				    			builder.setIcon(android.R.drawable.ic_dialog_alert)
-			        				    			.setTitle("Error!")
-			        				    			.setMessage("Failed to add new device: " + ResultCode.getString(resultCode))
-			        				    			.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-			        				    				@Override
-			        				    				public void onClick(DialogInterface dialog, int whichButton) {    					
-			        				    					dialog.dismiss();
-			        				    				}
-			        				    			})        
-			        				    			.create();
-			        				    			AlertDialog alert = builder.create();
-			        				    			alert.show();
-			        							}
-			        						});
-			        					} else {
-			        						getLastResultCode("addDeviceByCodeset result: ");
-			        					}
-		        					}else {
-		        						QuicksetSampleActivity.this._loadingDialog.dismiss();
-			        					QuicksetSampleActivity.this._loadingDialog = null;
-		        					}		        						
-		        				} else {
-		        					QuicksetSampleActivity.this._loadingDialog.dismiss();
-		        					QuicksetSampleActivity.this._loadingDialog = null;
-		        				}
-		        			}
-		        			catch (Exception e) {
-		        				e.printStackTrace();
-		        			}
-        				}
-        			};
-        			thread.start();
-                }
-        	});
-        
-        Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
-        buttonCancel.setOnClickListener(new OnClickListener() 
-        	{
-        		@Override
-                public void onClick(View v) 
-            	{	
-        			dialog.dismiss();
-        			QuicksetSampleActivity.this._addDeviceDialog = null;
-                }
-        	});        
-       
-        //now that the dialog is set up, it's time to show it    
-        dialog.show(); 
-        this._addDeviceDialog = dialog;
-	}
-    
 	/**
 	 * Device brand selected.
 	 */
@@ -1891,12 +851,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 					+ this._codesetIndex);
 			
 			if (hasValidSession()) {
-//				IDevice device = null;
-//				device = QuicksetSampleApplication.getSetup().addDevice(
-//						QuicksetSampleApplication.getSession(),
-//						getAuthenticationKey(),
-//						this._codesetIndex, deviceLabel);
-
 
 				// Get the device label
 				final int index = brandList.indexOf(_brandIndex);
@@ -2007,50 +961,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 	}
 
 
-	/** Retrieve the codesets to test for the selected brand. */
-	private void retrieveModelSearchCodesets() {
-		try {
-			if (hasValidSession()) {
-				int brandIndex = _brandIndex;
-				this._isSetupMapRoute = false;
-				EditText text = (EditText)findViewById(R.id.editModelname);
-				String modelName = text.getText().toString();
-
-				// model search requires at least 2 characters/numbers
-				if (modelName.length() >= MINUMUM_BRANDMODELTEXT) {
-					this._codesetCount = QuicksetSampleApplication
-							.getSetup()
-							.getCodesetCountByModel(
-									QuicksetSampleApplication.getSession(),
-									getAuthenticationKey(),
-									brandIndex, modelName);
-					this._codesetIndex = 0;
-					getLastResultCode("retrieveCodesets result: ");
-
-					this._useSetupMaps = _chkUseSetupMaps.isChecked();
-					if (this._useSetupMaps && this.isSetupMapAvailable()) {
-						final int index = brandList.indexOf(_brandIndex);
-						if (-1 == index) {
-							Log.e(LOGTAG, "Unknown index: " + _brandIndex);
-							return;
-						}
-
-						Log.d(QuicksetSampleActivity.LOGTAG, "Setup Map is available for "
-								+ brandList.get(index));
-						this.createSetupMap();
-					} else {
-						this.setCodesetToTest();
-					}
-
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-
-
 	/**
 	 * Refresh remote list
 	 */
@@ -2062,38 +972,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 							getAuthenticationKey());
 
 				if(this._bleManager != null) {
-					/*// retrieve current bonded sling remotes
-					HashMap<String, BluetoothDevice> devices = this._bleManager.getDiscoveredDevices();
-					List<String> curentRemotes = new ArrayList<>();
-					// check differences
-					if (remotes != null) {
-						for (Remote remote : remotes) {
-							if(remote != null) {
-								Log.d(QuicksetSampleActivity.LOGTAG, "Remote: " + remote.Id + " - " + remote.Version);
-								if (devices.containsKey(remote.Name) == false) {
-									// remote this remote form the list
-									int result = QuicksetSampleApplication.getSetup().removeRemote(
-											getAuthenticationKey(), remote.Id);
-									Log.d(QuicksetSampleActivity.LOGTAG, "Remove Remote: " + remote.Id + " - " + result);
-								} else {
-									curentRemotes.add(remote.Name);
-								}
-							}
-						}
-					}
-
-					// add any new bonded remotes
-					Set<String> remoteAddresses = devices.keySet();
-					for (String address : remoteAddresses) {
-						if (curentRemotes.contains(address) == false) {
-							Remote newRemote = QuicksetSampleApplication.getSetup().addRemote(
-									getAuthenticationKey(), address);
-							if (newRemote != null) {
-								Log.d(QuicksetSampleActivity.LOGTAG, "New Remote added: " + newRemote.Id + " - " + newRemote.Name);
-							}
-						}
-					}*/
-
 					this._remoteList.clear();
 					if (remotes != null) {
 						this._remoteList.addAll(Arrays.asList(remotes));
@@ -2292,15 +1170,13 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 							.setFunction(this._deviceFunctions);
 					this._deviceFunctionsAdapter.notifyDataSetChanged();
 					this._deviceFunctionsAdapter.setButtonOnClickListener(this._testFunctionClickListener);
-					showCodesetButtons();
+
 				} else {
-					TextView tvCodesets = (TextView)findViewById(R.id.txtCodesets);
-					tvCodesets.setText("No codes found!");
 
 					this._deviceFunctions.clear();
 					this._deviceFunctionsAdapter.notifyDataSetChanged();
 
-					hideCodesetButtons(false);
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -2328,8 +1204,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 								this._currentSetupMapTestKeyLabel,
 								this._currentSetuMapTestKeyId,
 								status.CurrentCandidatesCount);
-    			TextView tvCodesets = (TextView) findViewById(R.id.txtCodesets);
-				tvCodesets.setText(message);
 			
 				Log.d(QuicksetSampleActivity.LOGTAG,
 						"Setup map status: " + message);			
@@ -2388,12 +1262,9 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 
 		if (hasValidSession()) {
 			try {				
-				TextView tvCodesets = (TextView)findViewById(R.id.txtCodesets);
+
 
 				if (this._codesetCount > 0) {
-					tvCodesets.setText("Testing Code "
-							+ (this._codesetIndex + 1) + " of "
-							+ this._codesetCount);
 					
 					Log.e(QuicksetSampleActivity.LOGTAG,
 							"----- Get Test function: " + this._codesetIndex);
@@ -2423,15 +1294,12 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 					this._deviceFunctionsAdapter
 							.setFunction(this._deviceFunctions);
 					this._deviceFunctionsAdapter.notifyDataSetChanged();
-					
-					showCodesetButtons();
+
 				} else {
-					tvCodesets.setText("No codes found!");
-					
 					this._deviceFunctions.clear();
 					this._deviceFunctionsAdapter.notifyDataSetChanged();
 					
-					hideCodesetButtons(false);
+
     			}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -2444,13 +1312,9 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
     	
 		if (hasValidSession()) {
 			try {
-				TextView tvCodesets = (TextView) findViewById(R.id.txtCodesets);
-				
+
+
 				if (this._codesetCount > 0) {
-					tvCodesets.setText("Testing Code "
-							+ (this._codesetIndex + 1) + " of "
-							+ this._codesetCount);
-					
 					Log.e(QuicksetSampleActivity.LOGTAG,
 							"----- Get Full Test function: " + this._codesetIndex);
 
@@ -2480,15 +1344,11 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 					this._deviceFunctionsAdapter
 							.setFunction(this._deviceFunctions);
 					this._deviceFunctionsAdapter.notifyDataSetChanged();
-					
-					showCodesetButtons();
+
 				} else {
-					tvCodesets.setText("No codes found!");
-					
 					this._deviceFunctions.clear();
 					this._deviceFunctionsAdapter.notifyDataSetChanged();
-					
-					hideCodesetButtons(false);
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -2530,7 +1390,6 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 			updateVolumeSourceDevice();
 			Log.d(QuicksetSampleActivity.LOGTAG,
 					"retrieveDevices: notifyDataSetChanged()");
-			resetDeviceTesting();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
@@ -2567,142 +1426,10 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
     }
 
     private List<Integer> brandList = new ArrayList<>();
-    /** 
-	 * Retrieve the list of all possible brands for the current device type from
-	 * ISetup.
-	 * 
-     * @see ISetup
-     **/
-    private void retrieveBrands() {
-		try {
-			if (hasValidSession()) {
-				
-				TextView tvCodesets = (TextView)findViewById(R.id.txtCodesets);
-				tvCodesets.setText("");
-				resetDeviceTypeSelected(false);
-				// get the flag to retrieve top brands only or full brands
-				boolean topBrandsOnly = this._chkTopBrands.isChecked();
 
-				String[] brands = QuicksetSampleApplication
-							.getSetup()
-							.getBrands(
-						QuicksetSampleApplication.getSession(),
-									getAuthenticationKey(),
-									this._deviceTypeIndex, topBrandsOnly);
-
-				final String[] brandSubset = {
-						"Comcast",
-						"Dish Network",
-						"TiVo"
-				};
-
-				brandList = new ArrayList<>();
-				String brand;
-				for (int i = 0; i < brands.length; i++) {
-					brand = brands[i];
-					for (int j = 0; j < brandSubset.length; j++) {
-						if (brandSubset[j].equalsIgnoreCase(brand)) {
-							Log.d("MVR", "Brand: {" +brandSubset[j] + "["+ j + "], " + brand + "[" + i + "]}");
-							brandList.add(j, i);
-						}
-					}
-				}
-
-//				String[] b2 = new String[brandList.size()];
-//				int k = 0;
-//				for (Map.Entry<String, Integer> entry : brandList.entrySet()) {
-//					b2[k] = brands[entry.getValue()];
-//					k++;
-//				}
-//
-				stopWaitDialog();				
-				getLastResultCode("Retrieve brands: ");
-				displayBrands(brandSubset);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 		
-	/**
-	 * Display brands.
-	 *
-	 * @param brands the brands
-	 */
-	private void displayBrands(final String[] brands)
-	{
-		this.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					_brands.clear();
 
-					if (brands != null) {
-						for (int index = 0; index < brands.length; index++) {
-							Log.i(QuicksetSampleActivity.LOGTAG,
-									"--- Brand Name: " + brands[index]);
-							_brands.add(brands[index]);
-						}
-						Log.i(QuicksetSampleActivity.LOGTAG,
-								"--- TOTAL Brands: " + _brands.size());
-					}
-					_brandIndex = -1;
-					_brandsAdapter.notifyDataSetChanged();
-					_lstBrands.setSelection(0);
-					if(_brandIndex < 0 && _brands.size() > 0) {
-						// set first selection
-						_brandIndex = 0;
-						deviceBrandSelected();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});	
-	}
-  
-	/**
-	 * Handle device configuration was exported
-	 */
-	private void handleDeviceConfigurationExported(final boolean success, final String file) {
-		this.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					String message = "";
-					int icon = android.R.drawable.ic_dialog_info;
-					if(success ){
-						message = "Device configuration was successfully exported to " + file;						
-					}
-					else {
-					int resultCode = ResultCode.ERROR;
-						try {
-							resultCode = QuicksetSampleApplication.getSetup()
-									.getLastResultCode();
-													
-						} catch (RemoteException e) {
-							e.printStackTrace();
-						}
-						message = "Device configuration was failed to be exported: " + resultCode;
-						icon = android.R.drawable.ic_dialog_alert;
-					}
-					
-					AlertDialog.Builder builder1 = new AlertDialog.Builder(
-							QuicksetSampleActivity.this);
-					builder1.setTitle("Importing Configuration")
-							.setMessage(message)
-							.setIcon(icon)
-							.setCancelable(false)
-							.setPositiveButton("OK", null);
-					AlertDialog alert = builder1.create();
-					alert.show();
-				} catch (Exception e) {
-					e.printStackTrace();				
-				}
-			}		
-		});		
-	}
-	
+
 	/**
 	 * Handle device configuration was imported  
 	 */
@@ -2745,24 +1472,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 		});		
 	}
 
-	/**
-	 * Show waiting dialog.
-	 */
-	private void showWaitingDialog(final String message) {
 
-		if (_waitDialog != null) {
-			stopWaitDialog();
-		}
-		try {
-			_waitDialog = new ProgressDialog(QuicksetSampleActivity.this);
-			_waitDialog.setMessage(message);
-			_waitDialog.setIndeterminate(true);
-			_waitDialog.setCancelable(false);
-			_waitDialog.show();
-		} catch (Exception ex) {
-			Log.d(LOGTAG, "showWaitingDialog: " + ex.toString());
-		}
-	}
 
 	/**
 	 * Stop waiting dialog.
@@ -2815,15 +1525,15 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 	private OnTouchListener _testFunctionTouchListener = new OnTouchListener() {
     	@Override
 		public boolean onTouch(View v, MotionEvent e) {
-    				
+
 			switch (e.getAction()) {
 				case MotionEvent.ACTION_DOWN:
 					Integer position = (Integer)v.getTag();
-					QuicksetSampleActivity.this._deviceFunctionIndex = position;					
+					QuicksetSampleActivity.this._deviceFunctionIndex = position;
 					QuicksetSampleActivity.this.testStartIrFunction();
 					break;
 				case MotionEvent.ACTION_OUTSIDE:
-				case MotionEvent.ACTION_CANCEL:											
+				case MotionEvent.ACTION_CANCEL:
 				case MotionEvent.ACTION_UP:
 					QuicksetSampleActivity.this.testStopIrFunction();
 					break;
@@ -2833,7 +1543,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 				default: break;
 			}
 			return false;
-		} 
+		}
     };
 
 	/**
@@ -2890,7 +1600,7 @@ public class QuicksetSampleActivity extends Activity implements OnServiceDisconn
 							catch (Exception e) {
 								e.printStackTrace();
 							}
-							QuicksetSampleActivity.this.resetDeviceTesting();
+
 						}
 					});
 				}
