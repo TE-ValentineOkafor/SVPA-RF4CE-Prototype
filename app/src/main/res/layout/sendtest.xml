@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="true"
+    android:orientation="vertical" >
+	
+   	<TextView
+        	android:text="Send IR Pattern:"					
+			android:layout_width="fill_parent"
+			android:layout_height="60sp"
+			android:padding="5sp"
+			android:layout_marginTop="50sp"
+			android:layout_marginBottom="10sp"
+			android:layout_gravity="center_horizontal"
+			android:textSize="14sp"
+			android:textAppearance="?android:attr/textAppearanceLarge"></TextView>
+
+	<Button
+			android:layout_height="80sp"
+			android:id="@+id/btLGTVPower"
+			android:text="LG TV Power"
+			android:textSize="12sp"
+			android:layout_marginBottom="10sp"
+			android:layout_gravity="center_horizontal"
+			android:layout_width="250sp" />
+		<Button
+			android:layout_height="80sp"
+			android:id="@+id/btSamsungTVPower"
+			android:text="Samsung TV Power"
+			android:textSize="12sp"
+			android:layout_marginBottom="10sp"
+			android:layout_gravity="center_horizontal"
+			android:layout_width="250sp" />
+		<Button
+			android:layout_height="80sp"
+			android:id="@+id/btSonyTVPower"
+			android:text="Sony TV Power"
+			android:textSize="12sp"
+			android:layout_marginBottom="10sp"
+			android:layout_gravity="center_horizontal"
+			android:layout_width="250sp" />
+
+</LinearLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:id="@+id/layoutParent" 
+	android:orientation="vertical" android:padding="20dp" android:layout_gravity="center_vertical">
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" >
+		<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:text="Remote Id:" />
+		<Spinner
+			android:layout_height="40dp"
+			android:id="@+id/lstRemotes"
+			android:textSize="12sp"
+			android:textColor="#FFFF00"
+			android:layout_width="wrap_content"></Spinner>
+	</LinearLayout>
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" >
+		<Button
+			android:id="@+id/btnStarVoice"
+			android:background="@drawable/keybutton_selector"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="StartVoice"
+			android:layout_marginRight="5dp"
+			android:layout_gravity="center_horizontal" />
+		<Button
+			android:id="@+id/btnCancel"
+			android:background="@drawable/keybutton_selector"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Cancel" android:layout_gravity="center_horizontal" />
+	</LinearLayout>
+	<TextView
+		android:id="@+id/txtAudioFile"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:text="" />
+
+</LinearLayout>

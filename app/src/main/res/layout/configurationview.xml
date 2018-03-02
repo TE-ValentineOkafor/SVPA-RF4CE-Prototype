@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="true"
+    android:orientation="vertical" >	
+
+    <LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="0dp"
+	    android:layout_weight="6"
+	    android:orientation="vertical" >
+	     <LinearLayout
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="3.5"
+	    	android:orientation="horizontal" >
+	    	<TextView
+	    	        android:layout_width="120dp"
+				    android:layout_height="wrap_content"
+				    android:textSize="12sp" 
+				    android:layout_gravity="center_vertical"
+				    android:text="My Sharing ID:" />
+			<Spinner
+				android:layout_height="40dp"
+				android:id="@+id/lstMySharingId"
+				android:textSize="12sp"
+				android:layout_width="match_parent" />
+		</LinearLayout>
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="120dp"
+			android:layout_weight="8.5"
+			android:orientation="vertical" >
+
+			<TextView
+				android:text=""
+				android:id="@+id/txtMyConfigurations"
+				android:layout_width="fill_parent"
+				android:layout_height="50sp"
+				android:padding="5sp"
+				android:textSize="12sp"></TextView>
+			<Spinner
+				android:id="@+id/lstMyConfigurations"
+				android:textSize="12sp"
+				android:layout_width="match_parent"
+				android:layout_height="40dp">
+
+			</Spinner>
+		</LinearLayout>
+		<LinearLayout
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="3.5"
+	    	android:orientation="horizontal" >
+	    	<TextView
+	    	        android:layout_width="60dp"
+				    android:layout_height="wrap_content"
+				    android:textSize="12sp" 
+				    android:layout_gravity="center_vertical"
+				    android:text="Import Sharing ID:" />
+
+			<EditText
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:inputType="textShortMessage"
+				android:ems="10"
+				android:id="@+id/editImportSharingId"
+				android:layout_weight="1"
+				android:editable="true"
+				android:maxLength="5"
+				android:enabled="true"
+				android:hint="Enter Sharing ID:"
+				android:elevation="5dp"
+				android:contentDescription="Sharing Id" />
+
+		</LinearLayout>
+		
+		<LinearLayout
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content"
+	    	android:layout_weight="3.5"
+	    	android:orientation="horizontal" >
+	    	<TextView
+	    	        android:layout_width="60dp"
+				    android:layout_height="wrap_content"
+				    android:textSize="12sp" 
+				    android:layout_gravity="center_vertical"
+				    android:text="Configuration Names:" />
+			<Spinner
+				android:layout_height="40dp"
+				android:id="@+id/lstSharedConfigurations"
+				android:textSize="12sp"
+				android:layout_width="match_parent" />
+		</LinearLayout>
+		
+		<!-- <CheckBox android:id="@+id/ckbProvinceProviders" android:layout_width="wrap_content" android:textSize="12sp" 
+			    android:layout_height="wrap_content" android:text="Get Providers by Zipcode"></CheckBox> -->
+		
+	</LinearLayout>
+	<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="0dp"
+			android:layout_weight="4"	>
+
+			<LinearLayout
+				android:id="@+id/llConfigButtons"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:orientation="horizontal"
+				android:layout_weight="1.5">
+				<Button
+					android:id="@+id/btLoadSharedConfiguration"
+					android:layout_weight="1"
+					android:text="Load Shared"
+					android:layout_width="0sp"
+					android:textSize="10sp"
+					android:layout_gravity="center_vertical"
+					android:layout_height="wrap_content"></Button>
+				<Button
+					android:layout_height="wrap_content"
+					android:id="@+id/btSaveConfiguration"
+					android:text="Save Config"
+					android:layout_weight="1"
+					android:textSize="10sp"
+					android:layout_gravity="center_vertical"
+					android:layout_width="0dp"></Button>				
+			</LinearLayout>
+		</LinearLayout>
+
+</LinearLayout>

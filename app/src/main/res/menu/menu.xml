@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item android:id="@+id/menuVoiceSearch"  android:title="Voice Search" />
+    <item android:id="@+id/menuFindRemote"  android:title="Find Remote" />
+	<item android:id="@+id/menuFirmwareUpdate"  android:title="OTA Firmware Update" />
+	<item android:id="@+id/menuReadRemoteDeviceInfo"  android:title="Remote Device Info" />
+	<item android:id="@+id/menuAddEdidData"  android:title="Add EDID data" />
+</menu>

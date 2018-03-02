@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quickset SDK Sample</string>
+    <string name="btnNextCode">Next Code</string>
+    <string name="btnNextCode_NotWork">Didn\'t Work</string>
+    <string name="btnOK">OK</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="enable_vloop_btn_label">Enable Vloop</string>
+    <string name="disable_vloop_btn_label">Disable Vloop</string>
+    <string name="pairing_instructions">Initializing...</string>
+    <string name="cancel">Cancel</string>
+    <string name="pairing_ellipses">Pairing...</string>
+    <string name="pairing_completed_successfully">Pairing completed successfully!</string>
+    <string name="pairing_failed">Pairing failed</string>
+</resources>

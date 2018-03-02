@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"	 
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    >   
+    <LinearLayout android:id="@+id/linearLayout0" android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent" >
+       <LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="fill_parent">
+        	<TextView android:text="Device Type:" android:textSize="14sp" android:id="@+id/deviceType" 
+        			android:layout_width="100dp" android:layout_height="wrap_content"  android:layout_gravity="center_vertical"        			
+        			android:layout_margin="5dp" />
+        	<EditText android:text="" android:layout_width="160dp" android:layout_height="wrap_content" android:id="@+id/txtDeviceType" 
+        			android:layout_margin="5dp" android:singleLine="true"        			 
+        			android:textSize="14sp" />
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="fill_parent">
+        	<TextView android:text="Brand:" 
+        			android:textSize="14sp" android:id="@+id/deviceBrand" 
+        			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" 
+        			android:layout_margin="10dp"></TextView>
+        	<EditText android:text="" android:layout_width="match_parent" 
+        			android:layout_height="wrap_content" android:id="@+id/txtDeviceBrand" 
+        			android:layout_margin="10px" android:singleLine="true" 
+        			android:textSize="14sp"></EditText>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="fill_parent">
+        	<TextView android:text="Model:" 
+        			android:textSize="14sp" 
+        			android:id="@+id/deviceModel" 
+        			android:layout_width="wrap_content" android:layout_height="wrap_content"  android:layout_gravity="center_vertical"
+        			android:layout_margin="10dp"></TextView>
+        	<EditText android:text="" android:layout_width="match_parent" 
+        			android:layout_height="wrap_content" android:id="@+id/txtDeviceModel" 
+        			android:layout_margin="10px" android:singleLine="true" 
+        			android:textSize="14sp"></EditText>        
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="fill_parent">
+        	<TextView android:text="Device Name:" 
+        			android:textSize="14sp" android:id="@+id/deviceName" 
+        			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" 
+        			android:layout_margin="10dp"></TextView>
+        	<EditText android:text="" android:layout_width="match_parent" 
+        			android:layout_height="wrap_content" android:id="@+id/txtDeviceName" 
+        			android:layout_margin="10px" android:singleLine="true" 
+        			android:textSize="14sp"></EditText>
+        </LinearLayout>
+        
+         <LinearLayout android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="fill_parent">
+        	<TextView android:text="Codeset:" 
+        			android:textSize="14sp" android:id="@+id/deviceCodeset" 
+        			android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" 
+        			android:layout_margin="10dp"></TextView>
+        	<EditText android:text="" android:layout_width="match_parent" 
+        			android:layout_height="wrap_content" android:id="@+id/txtDeviceCodeset" 
+        			android:layout_margin="10px" android:singleLine="true" 
+        			android:textSize="14sp"></EditText>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" 
+         		android:layout_height="wrap_content" android:layout_width="fill_parent" 
+        			android:layout_weight="1" android:padding="5dp">               	
+	        <Button android:layout_height="wrap_content" android:layout_width="fill_parent"
+					android:background="@drawable/keybutton_selector"
+	        		android:text="Add Device" android:id="@+id/buttonOK" 
+	        		android:layout_weight="1" android:layout_margin="10px" android:textSize="12sp">
+			</Button>
+		    <Button android:layout_height="wrap_content" android:layout_width="fill_parent"
+					android:background="@drawable/keybutton_selector"
+		    		android:text="Cancel" android:id="@+id/buttonCancel" android:layout_weight="1" 
+		    		android:layout_margin="10px" android:textSize="12sp">
+			</Button>
+		</LinearLayout>
+    </LinearLayout>
+</LinearLayout>
