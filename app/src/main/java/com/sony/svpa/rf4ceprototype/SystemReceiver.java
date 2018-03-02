@@ -1,16 +1,15 @@
-package com.uei.sample;
+package com.sony.svpa.rf4ceprototype;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.provider.SyncStateContract;
 import android.util.Log;
 
 public class SystemReceiver extends BroadcastReceiver
 {
-    public static final String INTENT_FIRMWAREUPDATE = "com.uei.sample.FirmwareUpdateActivity";
+    public static final String INTENT_FIRMWAREUPDATE = "FirmwareUpdateActivity";
     public static final String INTENT_VOICE = "com.uei.sample.VoiceActivity";
-    private static final String INTENT_MAIN = "com.uei.sample.QuicksetSampleActivity";
+    private static final String INTENT_MAIN = "QuicksetSampleActivity";
 
 
     @Override

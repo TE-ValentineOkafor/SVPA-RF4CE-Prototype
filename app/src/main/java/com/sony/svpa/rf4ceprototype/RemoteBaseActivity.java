@@ -5,7 +5,7 @@
  * retrieval system, or transmitted by any means without prior written
  * Permission of Universal Electronics Inc.
  */
-package com.uei.sample;
+package com.sony.svpa.rf4ceprototype;
 
 import android.app.Activity;
 import android.util.Log;

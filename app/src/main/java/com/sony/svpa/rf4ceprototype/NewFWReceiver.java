@@ -1,4 +1,4 @@
-package com.uei.sample;
+package com.sony.svpa.rf4ceprototype;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

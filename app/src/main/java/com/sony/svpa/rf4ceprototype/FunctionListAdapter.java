@@ -5,7 +5,7 @@
  * retrieval system, or transmitted by any means without prior written
  * Permission of Universal Electronics Inc.
  */
-package com.uei.sample;
+package com.sony.svpa.rf4ceprototype;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;

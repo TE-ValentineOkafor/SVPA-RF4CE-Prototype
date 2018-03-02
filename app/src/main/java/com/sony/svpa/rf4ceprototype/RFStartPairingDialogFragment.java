@@ -5,7 +5,7 @@
  * retrieval system, or transmitted by any means without prior written
  * Permission of Universal Electronics Inc.
  */
-package com.uei.sample;
+package com.sony.svpa.rf4ceprototype;
 
 /*
  * Universal Electronics Inc.
@@ -18,7 +18,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 

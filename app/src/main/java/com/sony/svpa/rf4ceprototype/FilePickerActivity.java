@@ -1,12 +1,5 @@
 
-package com.uei.sample;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+package com.sony.svpa.rf4ceprototype;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -20,6 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class FilePickerActivity extends ListActivity {
 	

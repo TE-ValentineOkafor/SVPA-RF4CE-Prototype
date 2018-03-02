@@ -5,12 +5,9 @@
  * retrieval system, or transmitted by any means without prior written
  * Permission of Universal Electronics Inc.
  */
-package com.uei.sample;
+package com.sony.svpa.rf4ceprototype;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -20,11 +17,9 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.uei.control.IControl;
 import com.uei.control.IKeyEventCallback;
 import com.uei.control.IVoiceDataCallback;
 import com.uei.control.ResultCode;

@@ -5,7 +5,7 @@
  * retrieval system, or transmitted by any means without prior written 
  * Permission of Universal Electronics Inc. 
  */
-package com.uei.sample;
+package com.sony.svpa.rf4ceprototype;
 
 import android.Manifest;
 import android.app.Activity;
@@ -59,7 +59,7 @@ import com.uei.quickset.type.data.ControlTypeBase;
 import com.uei.quickset.type.data.QDevice;
 import com.uei.quickset.type.data.RFControlType;
 import com.uei.quickset.type.data.Status;
-import com.uei.sample.QuicksetSampleApplication.OnServiceDisconnectedListener;
+import com.sony.svpa.rf4ceprototype.QuicksetSampleApplication.OnServiceDisconnectedListener;
 
 import java.io.File;
 import java.io.FileInputStream;

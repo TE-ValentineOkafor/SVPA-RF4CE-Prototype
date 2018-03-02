@@ -5,7 +5,7 @@
  *
  * 
  */
-package com.uei.sample;
+package com.sony.svpa.rf4ceprototype;
 
 /**
  * The Class Scrambler.
