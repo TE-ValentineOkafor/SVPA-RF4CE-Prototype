@@ -2,4 +2,43 @@
 <resources>
     <color name="menuBackground">#222222</color>
     <color name="menuText">#FFFFFF</color>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#04AEDA</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent_black_color">#D8000000</color>
+    <color name="dark_purple">#2C5A7F</color>
+    <color name="dark_blue">#0B2F4C</color>
+    <color name="light_blue">#2196F3</color>
+
+    <color name="background_gradient_start">#000000</color>
+    <color name="background_gradient_end">#DDDDDD</color>
+    <color name="fastlane_background">#0096a6</color>
+    <color name="search_opaque">#ffaa3f</color>
+    <color name="spoken_word_hghlight">#FFCC5500</color>
+    <color name="selected_background">#ffaa3f</color>
+    <color name="detail_background">#0096a6</color>
+    <color name="soft_opaque">#30000000</color>
+    <color name="img_soft_opaque">#30FF0000</color>
+    <color name="img_full_opaque">#00000000</color>
+    <color name="black_opaque">#AA000000</color>
+    <color name="black">#000000</color>
+
+    <color name="orange_transparent">#AAFADCA7</color>
+    <color name="orange">#FADCA7</color>
+    <color name="yellow">#EEFF41</color>
+    <color name="default_background">#3d3d3d</color>
+    <color name="transparent">@android:color/transparent</color>
+
+    <color name="primary">#00BCD4</color>
+    <color name="primary_dark">#0097A7</color>
+    <color name="primary_light">#B2EBF2</color>
+    <color name="accent">#009688</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="spoken_word">#FFCC5500</color>
 </resources>

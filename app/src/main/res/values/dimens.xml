@@ -1,0 +1,85 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="theme_corner_radius">5dp</dimen>
+    <integer name="small_size">5</integer>
+
+    <!-- Text Size -->
+    <dimen name="text_size_lined_editor">22sp</dimen>
+    <dimen name="text_size_tiny">6sp</dimen>
+    <dimen name="text_size_xtiny">8sp</dimen>
+    <dimen name="text_size_small">10sp</dimen>
+    <dimen name="text_size_normal">14sp</dimen>
+    <dimen name="text_size_xnormal">16sp</dimen>
+    <dimen name="text_size_xxnormal">18sp</dimen>
+    <dimen name="text_size_header">20sp</dimen>
+    <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_xlarge">26sp</dimen>
+    <dimen name="text_size_xxlarge">28sp</dimen>
+    <dimen name="text_size_huge">30sp</dimen>
+    <dimen name="text_width_height">170dp</dimen>
+    <dimen name="text_size_height">30sp</dimen>
+
+    <!-- Margin & padding -->
+    <dimen name="margin_padding_xtiny">4dp</dimen>
+    <dimen name="margin_padding_tiny">6dp</dimen>
+    <dimen name="margin_padding_small">9dp</dimen>
+    <dimen name="margin_padding_xsmall">12dp</dimen>
+    <dimen name="margin_padding_normal">15dp</dimen>
+    <dimen name="margin_padding_xnormal">20dp</dimen>
+    <dimen name="margin_padding_xxnormal">25dp</dimen>
+    <dimen name="margin_padding_large">30dp</dimen>
+    <dimen name="margin_padding_xlarge">40dp</dimen>
+    <dimen name="margin_padding_xxlarge">50dp</dimen>
+    <dimen name="margin_large">70dp</dimen>
+    <dimen name="spacing">9dp</dimen>
+    <dimen name="dividerHeight">1dp</dimen>
+    <dimen name="icon_width_height">30dp</dimen>
+    <dimen name="large_brush">40dp</dimen>
+    <dimen name="thumbnail_height">72dp</dimen>
+    <dimen name="thumbnail_weight">72dp</dimen>
+
+
+
+
+
+    <dimen name="lb_browse_padding_start">56dp</dimen>
+    <dimen name="lb_browse_padding_top">0dp</dimen>
+    <dimen name="lb_browse_padding_end">56dp</dimen>
+    <dimen name="lb_browse_padding_bottom">18dp</dimen>
+    <dimen name="lb_browse_rows_margin_start">0dp</dimen>
+    <dimen name="lb_browse_rows_fading_edge">16dp</dimen>
+    <dimen name="lb_browse_rows_margin_top">0dp</dimen>
+    <dimen name="lb_vertical_grid_padding_bottom">87dp</dimen>
+
+    <dimen name="lb_browse_title_height">60dp</dimen>
+    <dimen name="lb_browse_title_icon_max_width">584dp</dimen>
+    <dimen name="lb_browse_title_icon_height">60dp</dimen>
+    <dimen name="lb_browse_title_text_size">44sp</dimen>
+
+    <dimen name="lb_browse_headers_width">270dp</dimen>
+    <integer name="lb_browse_headers_transition_delay">150</integer>
+    <integer name="lb_browse_headers_transition_duration">250</integer>
+    <integer name="lb_browse_rows_anim_duration">250</integer>
+    <item name="lb_browse_rows_scale" type="fraction">80%</item>
+
+    <!-- BasicCardView -->
+    <dimen name="lb_basic_card_main_width">140dp</dimen>
+    <dimen name="lb_basic_card_main_height">188dp</dimen>
+    <dimen name="lb_basic_card_info_height">52dp</dimen>
+    <dimen name="lb_basic_card_info_height_no_content">34dp</dimen>
+    <dimen name="lb_basic_card_info_padding_top">@dimen/margin_padding_xtiny</dimen>
+    <dimen name="lb_basic_card_info_padding_bottom">@dimen/margin_padding_xtiny</dimen>
+    <dimen name="lb_basic_card_info_padding_horizontal">@dimen/margin_padding_xtiny</dimen>
+    <dimen name="lb_basic_card_info_text_margin">1dp</dimen>
+    <dimen name="lb_basic_card_title_text_size">14sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">12sp</dimen>
+    <dimen name="lb_basic_card_info_badge_size">16dp</dimen>
+    <dimen name="lb_basic_card_info_badge_margin">4dp</dimen>
+    <dimen name="subtitle_minimum_font_size">13sp</dimen>
+
+</resources>

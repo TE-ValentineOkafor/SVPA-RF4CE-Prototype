@@ -1,0 +1,109 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:id="@+id/frameLayout"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@color/black"
+                                             tools:context="com.sony.svpa.rf4ceprototype.fragments.RFZRCOneFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/text_view_open_remote_setting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="70dp"
+        android:padding="50dp"
+        android:text="@string/open_remote_settings"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/indicatorContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.37"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <com.sony.svpa.rf4ceprototype.utils.SquareLayout
+        android:id="@+id/indicatorContainer"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="88dp"
+        android:layout_marginStart="121dp"
+        android:background="@drawable/indicator_container_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_open_remote_setting">
+
+        <TextView
+            android:id="@+id/text_view_setup"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/indicator_text"
+            android:textColor="@color/primary_text"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/image_view_detected_device"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:src="@drawable/set_top_box"/>
+
+        <TextView
+            android:id="@+id/text_view_device_name"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/device_name"
+            android:textColor="@color/primary_text"/>
+    </com.sony.svpa.rf4ceprototype.utils.SquareLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:layout_marginEnd="37dp"
+        android:layout_marginTop="28dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_open_remote_setting"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.362">
+
+        <Button
+            android:id="@+id/button_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:background="@drawable/button_selector"
+            android:layout_marginBottom="10dp"
+            android:text="@string/label_ok"/>
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="match_parent"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_selector"
+            android:text="@string/label_cancel"/>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

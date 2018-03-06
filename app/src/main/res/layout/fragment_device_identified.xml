@@ -1,0 +1,46 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.sony.svpa.rf4ceprototype.fragments.DeviceIdentifiedFragment">
+
+    <com.sony.svpa.rf4ceprototype.utils.SquareLayout
+        android:id="@+id/indicatorContainer"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:background="@drawable/indicator_container_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/text_view_setup"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_text"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:text="" />
+
+        <ImageView
+            android:id="@+id/image_view_detected_device"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/text_view_device_name"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/primary_text"
+            android:text="@string/device_name" />
+    </com.sony.svpa.rf4ceprototype.utils.SquareLayout>
+</FrameLayout>

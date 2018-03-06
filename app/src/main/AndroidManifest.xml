@@ -1,73 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sony.svpa.rf4ceprototype">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.sony.svpa.rf4ceprototype">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
-        android:name="com.sony.svpa.rf4ceprototype.QuicksetSampleApplication"
+        android:name=".uei.QuicksetSampleApplication"
         android:icon="@drawable/icon"
-        android:label="@string/app_name">
+        android:label="@string/app_name"
+        android:logo="@mipmap/ic_launcher_leanback"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.Transparent"
+        tools:ignore="MissingTvBanner">
         <uses-library android:name="com.mediatek.twoworlds.tv"/>
+
         <activity
-            android:name="com.sony.svpa.rf4ceprototype.QuicksetSampleActivity"
+            android:name=".uei.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="landscape">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="com.sony.svpa.rf4ceprototype.FirmwareUpdateActivity"
-            android:label="Firmware Update" />
+            android:name=".uei.FirmwareUpdateActivity"
+            android:label="Firmware Update"/>
         <activity
-            android:name="com.sony.svpa.rf4ceprototype.FilePickerActivity"
-            android:label="Select File" />
+            android:name=".uei.FilePickerActivity"
+            android:label="Select File"/>
         <activity
-            android:name="com.sony.svpa.rf4ceprototype.FindRemoteActivity"
-            android:label="Find Remote" />
+            android:name=".uei.FindRemoteActivity"
+            android:label="Find Remote"/>
         <activity
-            android:name="com.sony.svpa.rf4ceprototype.VoiceSearchActivity"
-            android:label="Voice Search" />
+            android:name=".uei.VoiceSearchActivity"
+            android:label="Voice Search"/>
         <activity
-            android:name="com.sony.svpa.rf4ceprototype.ReadRemoteActivity"
-            android:label="Read Device Info" />
+            android:name=".uei.ReadRemoteActivity"
+            android:label="Read Device Info"/>
         <activity
-            android:name="com.sony.svpa.rf4ceprototype.SetEdidDataActivity"
-            android:label="Set EDID Data" />
+            android:name=".uei.SetEdidDataActivity"
+            android:label="Set EDID Data"/>
 
-        <receiver android:name="com.sony.svpa.rf4ceprototype.NewFWReceiver">
+        <receiver android:name=".uei.NewFWReceiver">
             <intent-filter>
-                <action android:name="com.uei.quicksetsdk.sony.NEW_FIRMWARE_AVAILABLE" />
+                <action android:name="com.uei.quicksetsdk.sony.NEW_FIRMWARE_AVAILABLE"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="com.sony.svpa.rf4ceprototype.SystemReceiver">
+        <receiver android:name=".uei.SystemReceiver">
             <intent-filter>
-                <action android:name="com.uei.sample.FirmwareUpdateActivity" />
-                <action android:name="com.uei.sample.VoiceActivity" />
+                <action android:name="com.uei.sample.FirmwareUpdateActivity"/>
+                <action android:name="com.uei.sample.VoiceActivity"/>
             </intent-filter>
         </receiver>
 
-        <activity android:name="com.sony.svpa.rf4ceprototype.RFPairingProgressActivity"></activity>
+        <activity android:name=".uei.RFPairingProgressActivity"/>
+        <activity android:name=".activities.WizardActivity">
+        </activity>
+
+        <service
+            android:name=".services.SetupService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+        <service android:name=".hotplug.service.MonitorJobService"/>
+        <service
+            android:name=".hotplug.service.HotplugListenerService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
+
+        <activity android:name=".activities.RFSetupActivity">
+        </activity>
     </application>
 
 </manifest>

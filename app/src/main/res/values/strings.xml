@@ -1,6 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Quickset SDK Sample</string>
+    <string name="app_name">RF4CEPrototype</string>
+
+    <string name="title_activity_wizard">WizardActivity</string>
+    <string name="dummy_button">Full Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="indicator_text">Identifying</string>
+    <string name="title_activity_hot_plug">HotPlugActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="new_device_dtected">New device detected</string>
+    <string name="device_name">DirectTv</string>
+    <string name="find_ir_blaster">To control your set-top box with your TV remote find your IR Blaster cable and plug it into the IR blaster port on the back of your TV</string>
+    <string name="label_ok">Ok</string>
+    <string name="label_cancel">Cancel</string>
+    <string name="remote_control_pairing">Remote Control pairing</string>
+    <string name="enter_pairing_code">Please enter the code displayed below to pair your remote control to this device</string>
+    <string name="enter_pin">Enter the 3 digit pin on your Sony remote</string>
+    <string name="open_remote_settings">Open the remote control settings on your cable/satellite box and select Program Remote (RF)</string>
+    <string name="press_the_system_info">Press the SYSTEM INFO Button on your Cable/Satellite box</string>
+    <string name="can_you_change_channel">Can you change the channel on your cable/satellite box with your TV remote?</string>
+    <string name="label_yes">Yes</string>
+    <string name="label_no">No</string>
+    <string name="title_activity_initial_setup">InitialSetupActivity</string>
+    <string name="title_activity_first_setup">FirstSetupActivity</string>
+    <string name="connect_devices">Connect and turn on all of your devices</string>
+    <string name="hdmi_label_1">HDMI 1</string>
+    <string name="hdmi_label_2">HDMI 2</string>
+    <string name="hdmi_label_3">HDMI 3</string>
+    <string name="hdmi_label_4">HDMI 4</string>
+    <string name="hdmi_label_5">HDMI 5</string>
+    <string name="antenna">Antenna</string>
+    <string name="hdmi_label_arc">ARC</string>
+    <string name="label_setup">Setup your</string>
+    <string name="connect_audio">Connect your audio system or sound bar to HDMI ARC</string>
+    <string name="label_sound_bar">Sound bar</string>
+    <string name="label_dish">Dish</string>
+    <string name="label_blu_ray">Blu-ray</string>
+    <string name="label_play_station">Playstation</string>
+    <string name="detecting">Detecting</string>
+
+    <!--Quickset sample strings-->
     <string name="btnNextCode">Next Code</string>
     <string name="btnNextCode_NotWork">Didn\'t Work</string>
     <string name="btnOK">OK</string>
@@ -12,4 +53,14 @@
     <string name="pairing_ellipses">Pairing...</string>
     <string name="pairing_completed_successfully">Pairing completed successfully!</string>
     <string name="pairing_failed">Pairing failed</string>
+
+    <!--Hot Plug-->
+    <string name="title_activity_main">MainActivity</string>
+    <string name="type_recorder" sony_id="32336">Recorder</string>
+    <string name="type_device" sony_id="32339">Device</string>
+    <string name="type_player" sony_id="32337">Player</string>
+    <string name="type_tuner" sony_id="32338">Tuner</string>
+    <string name="type_audio" sony_id="30110">Audio system</string>
+    <string name="type_mobile" sony_id="62516">Mobile</string>
+
 </resources>
