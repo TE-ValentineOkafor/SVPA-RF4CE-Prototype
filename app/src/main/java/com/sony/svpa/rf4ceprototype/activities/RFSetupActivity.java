@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,7 +27,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class RFSetupActivity extends AppCompatActivity {
+public class RFSetupActivity extends Activity {
 
     public final static String TAG = "RFSetupActivity";
     private Activity mActivity;
@@ -50,7 +49,6 @@ public class RFSetupActivity extends AppCompatActivity {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-
                                 Intent setupIntent = new Intent(mActivity, RFSetupActivity.class);
                                 setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -87,7 +85,6 @@ public class RFSetupActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 deviceInformation = gson.fromJson(deviceInfo, DeviceInformation.class);
 
-                int rf_type = deviceInformation.getDevType();
                 String deviceName = deviceInformation.getOsdName();
                 Log.d(TAG, "deviceName: " + deviceName);
                 Fragment fragment = null;
