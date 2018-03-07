@@ -81,6 +81,7 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
 	private static final int WAITFORCONNECTION = 20000;
 	private static final int MAXRETRIES = 3;
 	public static final int REQUEST_STORAGE_PERMISSION = 100;
+	private static final int EPG_SETUP_REQUEST = 667;
 
 	private static final String[] MenuOptions = new String[] {
 			"Select Menu",

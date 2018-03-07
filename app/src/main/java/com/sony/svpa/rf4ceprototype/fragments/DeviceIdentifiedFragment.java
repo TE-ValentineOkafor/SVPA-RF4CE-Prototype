@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.sony.svpa.rf4ceprototype.R;
-import com.sony.svpa.rf4ceprototype.activities.RFSetupActivity;
+import com.sony.svpa.rf4ceprototype.activities.ProviderActivity;
 import com.sony.svpa.rf4ceprototype.hotplug.model.DeviceInformation;
 import com.sony.svpa.rf4ceprototype.utils.Constants;
 import com.sony.svpa.rf4ceprototype.utils.SquareLayout;
@@ -86,7 +86,7 @@ public class DeviceIdentifiedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 squareLayout.setVisibility(View.GONE);
-                Intent setupIntent = new Intent(getActivity(), RFSetupActivity.class);
+                Intent setupIntent = new Intent(getActivity(), ProviderActivity.class);
                 setupIntent.putExtra(Constants.DEVICE_INFORMATION, deviceInfo);
                 startActivity(setupIntent);
             }

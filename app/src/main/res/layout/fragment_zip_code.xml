@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent_black_color"
+    tools:context="com.sony.svpa.rf4ceprototype.fragments.ZipCodeFragment">
+
+
+    <TextView
+        android:id="@+id/text_view_zip_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="73dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="159dp"
+        android:text="Enter your zip code"
+        android:textSize="@dimen/text_size_large"
+        app:layout_constraintEnd_toStartOf="@+id/edit_text_zip_code"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/edit_text_zip_code"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="348dp"
+        android:fontFamily="sans-serif-light"
+        android:inputType="number"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/text_view_zip_code"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_view_zip_code"
+        />
+</android.support.constraint.ConstraintLayout>
