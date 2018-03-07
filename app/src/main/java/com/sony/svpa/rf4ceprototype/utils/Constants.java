@@ -23,6 +23,7 @@ public class Constants {
     public static final String CABLE_BOX_NAME = "cable_box_name";
     public static final String HDMI_LABEL = "hdmi_label";
     public static final String DEVICE_INFORMATION = "device_info";
+    public static final String REMOTE_MAC_ADDRESS = "remote_mac_address";
 
 
     public static String[] sampleDevicesTypes = new String[]{

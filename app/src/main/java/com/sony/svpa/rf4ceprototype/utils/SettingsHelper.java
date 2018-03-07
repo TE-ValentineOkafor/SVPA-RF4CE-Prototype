@@ -10,6 +10,7 @@ import com.sony.svpa.rf4ceprototype.events.EpgProviderChangedEvent;
 import com.sony.svpa.rf4ceprototype.models.EpgArea;
 import com.sony.svpa.rf4ceprototype.models.EpgCountry;
 import com.sony.svpa.rf4ceprototype.models.Provider;
+import com.uei.control.Remote;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -154,4 +155,13 @@ public class SettingsHelper {
         calendar.add(Calendar.DAY_OF_YEAR, 7);
         return calendar.getTime();
     }
+
+    public void setRemoteMacAddress(Remote remote){
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putString(Constants.REMOTE_MAC_ADDRESS, remote.Name);
+        editor.commit();
+
+    }
+
+
 }

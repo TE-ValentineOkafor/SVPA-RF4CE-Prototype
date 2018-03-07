@@ -16,7 +16,6 @@ import com.sony.svpa.rf4ceprototype.events.OpenFragmentEvent;
 import com.sony.svpa.rf4ceprototype.fragments.EspDishFragment;
 import com.sony.svpa.rf4ceprototype.fragments.SetupVerifyFragment;
 import com.sony.svpa.rf4ceprototype.hotplug.model.DeviceInformation;
-import com.sony.svpa.rf4ceprototype.uei.MainActivity;
 import com.sony.svpa.rf4ceprototype.utils.ChannelChangeManager;
 import com.sony.svpa.rf4ceprototype.utils.Constants;
 import com.sony.svpa.rf4ceprototype.utils.KeySequenceHelper;

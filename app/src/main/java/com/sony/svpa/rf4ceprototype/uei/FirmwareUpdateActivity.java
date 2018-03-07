@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import com.sony.svpa.rf4ceprototype.R;
+import com.sony.svpa.rf4ceprototype.activities.MainActivity;
 import com.uei.control.*;
 import com.uei.encryption.helpers.CallerHelper;
 import com.uei.quickset.QuickSet;

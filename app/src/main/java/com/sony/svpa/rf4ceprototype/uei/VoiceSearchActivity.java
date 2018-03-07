@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sony.svpa.rf4ceprototype.R;
+import com.sony.svpa.rf4ceprototype.activities.MainActivity;
 import com.uei.control.IKeyEventCallback;
 import com.uei.control.IVoiceDataCallback;
 import com.uei.control.ResultCode;

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.sony.svpa.rf4ceprototype.activities.MainActivity;
+
 public class SystemReceiver extends BroadcastReceiver
 {
     public static final String INTENT_FIRMWAREUPDATE = "FirmwareUpdateActivity";

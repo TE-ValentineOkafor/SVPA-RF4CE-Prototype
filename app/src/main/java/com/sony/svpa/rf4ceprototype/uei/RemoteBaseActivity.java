@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.sony.svpa.rf4ceprototype.R;
+import com.sony.svpa.rf4ceprototype.activities.MainActivity;
 import com.uei.control.Remote;
 
 import java.util.ArrayList;

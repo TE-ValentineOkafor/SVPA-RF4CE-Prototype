@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.sony.svpa.rf4ceprototype.activities.MainActivity;
+
 public class NewFWReceiver extends BroadcastReceiver {
     public static final String BROADCASTINTENT_MESSAGE_REMOTEID = "ID";
     public static final String BROADCASTINTENT_MESSAGE_MAC = "MAC";

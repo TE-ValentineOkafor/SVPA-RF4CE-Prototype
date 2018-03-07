@@ -5,7 +5,7 @@
  * retrieval system, or transmitted by any means without prior written 
  * Permission of Universal Electronics Inc. 
  */
-package com.sony.svpa.rf4ceprototype.uei;
+package com.sony.svpa.rf4ceprototype.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
@@ -39,6 +38,16 @@ import android.widget.Toast;
 import com.sony.svpa.rf4ceprototype.R;
 import com.sony.svpa.rf4ceprototype.hotplug.service.HotplugListenerService;
 import com.sony.svpa.rf4ceprototype.hotplug.service.MonitorJobService;
+import com.sony.svpa.rf4ceprototype.uei.FilePickerActivity;
+import com.sony.svpa.rf4ceprototype.uei.FirmwareUpdateActivity;
+import com.sony.svpa.rf4ceprototype.uei.FunctionListAdapter;
+import com.sony.svpa.rf4ceprototype.uei.IRActionManager;
+import com.sony.svpa.rf4ceprototype.uei.IRCommand;
+import com.sony.svpa.rf4ceprototype.uei.QuicksetSampleApplication;
+import com.sony.svpa.rf4ceprototype.uei.RFPairingInitializationDialogFragment;
+import com.sony.svpa.rf4ceprototype.uei.SystemReceiver;
+import com.sony.svpa.rf4ceprototype.uei.VoiceSearchActivity;
+import com.sony.svpa.rf4ceprototype.utils.SettingsHelper;
 import com.uei.control.BLEManager;
 import com.uei.control.Device;
 import com.uei.control.DeviceChangedEvent;
@@ -125,12 +134,6 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
 	/** Current bonded DirecTV remotes */
 	private ArrayList<Remote> _remoteList= new ArrayList<>();
 
-	/** The remotes adapter. */
-	private RemoteListAdapter _remotesAdapter = null;
-
-	/** The volume source adapter. */
-	private DeviceTypeListAdapter _volumeSourceAdapter = null;
-
 	/** Current devices for volume source. */
 	private ArrayList<String> _volSourceDevices = new ArrayList<String>();
 
@@ -142,8 +145,7 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
 	/** Store and display configured devices retrieved from ISetup. */
 	private ArrayList<IDevice> _devices = new ArrayList<IDevice>();
 	
-	/** The devices adapter. */
-	private DeviceListAdapter _devicesAdapter = null;
+
 	
 	/** The device type list spinner */
 	private Spinner _lstDeviceTypes = null; 
@@ -375,6 +377,22 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
     protected void onResume()
     {
     	super.onResume();
+		if(this._init == false){
+			hasValidSession();
+			updateRemotesList();
+			if (QuicksetSampleApplication.getControl() != null) {
+				try {
+					this.retrieveDevices();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		else
+		{
+			this._init = false;
+		}
     	startCommandThread();
     }
     
@@ -464,10 +482,6 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
 
 				try {
 					long wait = System.currentTimeMillis();
-
-
-
-
 					while ((System.currentTimeMillis() - wait) <= WAITFORCONNECTION) {
 						boolean isReady = QuicksetSampleApplication.isQSServicesReady();
 						IControl control = QuicksetSampleApplication.getControl();
@@ -746,43 +760,6 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
     	return compatManager.getAuthenticationKey();
     }
 
-	/** Attach handlers for bonded remote controls. */
-	private void bindRemotesList() {
-		this._lstRemotes = (Spinner) findViewById(R.id.lstRemotes);
-		this._remotesAdapter = new RemoteListAdapter(this, android.R.layout.simple_spinner_dropdown_item,
-				this._remoteList);
-		this._lstRemotes.setAdapter(this._remotesAdapter);
-
-		this._lstRemotes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent,
-									   View view, int position, long id) {
-				if(_remoteList != null && position < _remoteList.size() && position >= 0) {
-					Remote remote = _remoteList.get(position);
-					if(remote != null) {
-						try {
-							// select remote for Setup
-							if (QuicksetSampleApplication.getSetup() != null) {
-								int result = QuicksetSampleApplication.getSetup().selectRemote(
-										getAuthenticationKey(), remote.Id);
-								Log.d(MainActivity.LOGTAG,
-										" Selecting remote Id: " + remote.Id + ", Result = " +
-												result);
-							}
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapter) {
-
-			}
-		});
-	}
 
 	/**
 	 * Device brand selected.
@@ -914,33 +891,7 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
 			e.printStackTrace();
 		}
     }
-    
-    /** Remove a device from the list of configured devices. */
-    private void deleteDevice() {
-		try {
-			Log.d(MainActivity.LOGTAG, "deleteDevice: " + this._deviceIndex);
-			
-			if(hasValidSession())
-			{	
-				if (this._deviceIndex != -1) {
-					Device d = (Device) this._devicesAdapter.getItem(this._deviceIndex);
-					int result = QuicksetSampleApplication.getSetup().removeDevice(
-							QuicksetSampleApplication.getSession(),
-							getAuthenticationKey(),
-							d.getId());
-					
-					getLastResultCode("deleteDevice result: ");
-					
-					if(result == ResultCode.SUCCESS) {
-						this.retrieveDevices();
-					}
-				}
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
+
     
     /** Retrieve the codesets to test for the selected brand. */
 	private void retrieveCodesets()
@@ -981,7 +932,8 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
 					this._remoteList.clear();
 					if (remotes != null) {
 						this._remoteList.addAll(Arrays.asList(remotes));
-						this._remotesAdapter.notifyDataSetChanged();
+						SettingsHelper.getHelper(_singleton).setRemoteMacAddress(_remoteList.get(0));
+						Toast.makeText(_singleton, "Remote Id: " + _remoteList.get(0).Name, Toast.LENGTH_LONG).show();
 					}
 				} else {
 					Log.e(MainActivity.LOGTAG, "-- NO BluetoothManager --");
@@ -1390,8 +1342,6 @@ public class MainActivity extends Activity implements QuicksetSampleApplication.
 			} else {
 				this._deviceIndex = -1;
             }
-			this._devicesAdapter.notifyDataSetChanged();
-			this._volumeSourceAdapter.notifyDataSetChanged();
 			updateRemotesList();
 			updateVolumeSourceDevice();
 			Log.d(MainActivity.LOGTAG,
