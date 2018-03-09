@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.sony.svpa.rf4ceprototype.app.QuicksetSampleApplication;
 import com.uei.control.Device;
 import com.uei.control.Remote;
 

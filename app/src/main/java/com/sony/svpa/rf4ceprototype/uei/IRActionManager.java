@@ -10,6 +10,7 @@ package com.sony.svpa.rf4ceprototype.uei;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.sony.svpa.rf4ceprototype.app.QuicksetSampleApplication;
 import com.uei.control.ISetup;
 import com.uei.control.ResultCode;
 import com.uei.encryption.helpers.CallerHelper;

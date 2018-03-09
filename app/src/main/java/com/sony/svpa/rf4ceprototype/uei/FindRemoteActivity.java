@@ -17,6 +17,7 @@ import android.widget.RadioButton;
 
 import com.sony.svpa.rf4ceprototype.R;
 import com.sony.svpa.rf4ceprototype.activities.MainActivity;
+import com.sony.svpa.rf4ceprototype.app.QuicksetSampleApplication;
 import com.uei.control.IFindRemoteCallback;
 import com.uei.control.ResultCode;
 

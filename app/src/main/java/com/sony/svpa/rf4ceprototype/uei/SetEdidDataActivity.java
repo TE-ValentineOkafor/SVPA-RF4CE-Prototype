@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.sony.svpa.rf4ceprototype.R;
 import com.sony.svpa.rf4ceprototype.activities.MainActivity;
+import com.sony.svpa.rf4ceprototype.app.QuicksetSampleApplication;
 import com.uei.control.ISetup;
 import com.uei.control.ResultCode;
 import com.uei.encryption.helpers.CallerHelper;

@@ -43,7 +43,7 @@ import com.sony.svpa.rf4ceprototype.uei.FirmwareUpdateActivity;
 import com.sony.svpa.rf4ceprototype.uei.FunctionListAdapter;
 import com.sony.svpa.rf4ceprototype.uei.IRActionManager;
 import com.sony.svpa.rf4ceprototype.uei.IRCommand;
-import com.sony.svpa.rf4ceprototype.uei.QuicksetSampleApplication;
+import com.sony.svpa.rf4ceprototype.app.QuicksetSampleApplication;
 import com.sony.svpa.rf4ceprototype.uei.RFPairingInitializationDialogFragment;
 import com.sony.svpa.rf4ceprototype.uei.SystemReceiver;
 import com.sony.svpa.rf4ceprototype.uei.VoiceSearchActivity;

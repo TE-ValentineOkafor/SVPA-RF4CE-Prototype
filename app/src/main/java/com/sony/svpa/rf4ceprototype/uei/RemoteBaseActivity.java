@@ -15,6 +15,7 @@ import android.widget.Spinner;
 
 import com.sony.svpa.rf4ceprototype.R;
 import com.sony.svpa.rf4ceprototype.activities.MainActivity;
+import com.sony.svpa.rf4ceprototype.app.QuicksetSampleApplication;
 import com.uei.control.Remote;
 
 import java.util.ArrayList;

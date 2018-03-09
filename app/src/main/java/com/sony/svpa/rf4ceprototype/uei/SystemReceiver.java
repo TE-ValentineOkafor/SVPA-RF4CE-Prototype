@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.sony.svpa.rf4ceprototype.activities.MainActivity;
+import com.sony.svpa.rf4ceprototype.app.QuicksetSampleApplication;
 
 public class SystemReceiver extends BroadcastReceiver
 {
